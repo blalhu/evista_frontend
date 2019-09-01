@@ -1,5 +1,9 @@
 <p>Products</p>
+<button (click)="updateProducts()">refresh</button>
 
 <ul>
-  <li *ngFor="let product of products" id="{{product.id}}">{{product.name}}</li>
+  <li *ngFor="let product of products">
+    <span>{{product.name}}</span>
+    <button (click)="addProductToCart(product)">Add to cart</button>
+  </li>
 </ul>
