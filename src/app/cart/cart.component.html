@@ -1,0 +1,11 @@
+<p>Cart</p>
+
+<ul>
+  <li *ngFor="let item of items">
+    <span>{{item.product.name}}</span>
+    <span>({{item.requiredAmount}})</span>
+    <button (click)="cartService.decreaseItemAmount(item.product)">-</button>
+    <button (click)="cartService.increaseItemAmount(item.product)">+</button>
+    <button (click)="cartService.removeItem(item.product)">X</button>
+  </li>
+</ul>

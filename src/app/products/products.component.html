@@ -4,6 +4,6 @@
 <ul>
   <li *ngFor="let product of products">
     <span>{{product.name}}</span>
-    <button (click)="addProductToCart(product)">Add to cart</button>
+    <button (click)="cartService.addItem(product)">Add to cart</button>
   </li>
 </ul>

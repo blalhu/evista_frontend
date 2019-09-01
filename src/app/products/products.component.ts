@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Product } from './product';
 import { HttpClient } from '@angular/common/http';
 import {tap} from 'rxjs/operators';
+import {CartComponent} from '../cart/cart.component';
+import {CartService} from '../cart.service';
 
 @Component({
   selector: 'app-products',
@@ -13,7 +15,8 @@ export class ProductsComponent implements OnInit {
   products: Array<Product> = [];
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    public cartService: CartService
   ) { }
 
   ngOnInit() {
@@ -41,6 +44,7 @@ export class ProductsComponent implements OnInit {
     }
   }
   public addProductToCart( product: Product ) {
+
     console.log(product);
   }
 }
