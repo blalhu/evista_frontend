@@ -2,6 +2,7 @@ import {Injectable, OnInit} from '@angular/core';
 import {CartItem} from './cart/cartItem';
 import {Product} from './products/product';
 import {BehaviorSubject} from 'rxjs';
+import {ProductService} from './product.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,14 +11,18 @@ export class CartService {
   private items: Array<CartItem> = [];
   private itemsSubject = new BehaviorSubject<Array<CartItem>>(this.items)
 
-  constructor() {
-    this.itemsSubject.subscribe(value => {
-      localStorage.setItem('cart-content', this.toJsonString());
-    });
+  constructor(
+    private productService: ProductService
+  ) {
+      productService.getProductUpdateObserver().subscribe((products) => {
+        this.loadFromLocalStorage();
+        this.itemsSubject.subscribe(value => {
+          localStorage.setItem('cart-content', this.toJsonString());
+        });
+      });
   }
 
   getItems(): Array<CartItem> {
-    console.log(localStorage.getItem('cart-content'));
     return this.items;
   }
 
@@ -78,6 +83,18 @@ export class CartService {
       });
     }
     return JSON.stringify(jsonObj);
+  }
+
+  public loadFromLocalStorage() {
+    let jsonObj = JSON.parse( localStorage.getItem('cart-content') );
+    for (let i in jsonObj.items) {
+      let item = jsonObj.items[i];
+      let product = this.productService.getProductById( item.id );
+      let cartItem = new CartItem();
+      cartItem.product = product;
+      cartItem.requiredAmount = item.amount;
+      this.items.push( cartItem );
+    }
   }
 
 }
