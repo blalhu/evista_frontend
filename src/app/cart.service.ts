@@ -44,6 +44,7 @@ export class CartService {
     this.items.push( cartItem );
     this.itemsSubject.next(this.items); //TODO: find an AOP way!
   }
+
   public increaseItemAmount( product: Product ) {
     let item = this.findItem(product);
     if ( item.requiredAmount + 1 > product.availableAmount ) {
@@ -53,6 +54,7 @@ export class CartService {
     item.requiredAmount++;
     this.itemsSubject.next(this.items); //TODO: find an AOP way!
   }
+
   public decreaseItemAmount( product: Product ) {
     let item = this.findItem(product);
     if (item.requiredAmount - 1 < 1) {
@@ -62,6 +64,7 @@ export class CartService {
     item.requiredAmount--;
     this.itemsSubject.next(this.items); //TODO: find an AOP way!
   }
+
   public removeItem( product: Product ) {
     if (!confirm('Are you sure you want to remove this item?')) {
       return;
@@ -76,6 +79,7 @@ export class CartService {
     }
     this.itemsSubject.next(this.items); //TODO: find an AOP way!
   }
+
   private findItem( testableProduct: Product ): CartItem|null {
     for (let i in this.items) {
       let currentItem = this.items[i];
@@ -86,6 +90,7 @@ export class CartService {
     }
     return null;
   }
+
   private itemAlreadyAdded(testableProduct: Product): boolean {
     return this.findItem(testableProduct) !== null;
   }
