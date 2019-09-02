@@ -3,6 +3,7 @@ import {CartItem} from './cart/cartItem';
 import {Product} from './products/product';
 import {BehaviorSubject} from 'rxjs';
 import {ProductService} from './product.service';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class CartService {
   private itemsSubject = new BehaviorSubject<Array<CartItem>>(this.items)
 
   constructor(
-    private productService: ProductService
+    private productService: ProductService,
+    private http: HttpClient
   ) {
       productService.getProductUpdateObserver().subscribe((products) => {
         this.loadFromLocalStorage();
@@ -98,6 +100,18 @@ export class CartService {
       cartItem.requiredAmount = item.amount;
       this.items.push( cartItem );
     }
+  }
+
+  public saveCart() {
+    console.log(this.items);
+    this.http.post(
+      'http://127.0.0.1:16480/api/orders/',
+      this.toJsonString()
+    ).subscribe(
+      res => {
+        console.log( 'orders saved' );
+      }
+    );
   }
 
 }
