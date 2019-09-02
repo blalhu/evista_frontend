@@ -11,6 +11,8 @@ export class ProductService {
 
   private products: Array<Product> = [];
 
+  private productResourceUrl: string = 'http://127.0.0.1:16480/api/products/';
+
   private productUpdateObserver: Subject<Array<Product>>;
 
   constructor(
@@ -29,7 +31,7 @@ export class ProductService {
 
   public updateProducts() {
     this.http.get(
-      'http://127.0.0.1:16480/api/products/',
+      this.productResourceUrl,
       {observe: 'response'}
     )
       .pipe(

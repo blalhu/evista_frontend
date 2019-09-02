@@ -11,7 +11,9 @@ import {catchError} from 'rxjs/operators';
 })
 export class CartService {
   private items: Array<CartItem> = [];
-  private itemsSubject = new BehaviorSubject<Array<CartItem>>(this.items)
+  private itemsSubject = new BehaviorSubject<Array<CartItem>>(this.items);
+
+  private orderResourceUrl :string = 'http://127.0.0.1:16480/api/orders/';
 
   constructor(
     private productService: ProductService,
@@ -129,7 +131,7 @@ export class CartService {
       return;
     }
     this.http.post(
-      'http://127.0.0.1:16480/api/orders/',
+      this.orderResourceUrl,
       this.toJsonString(),
       {observe: 'response'}
     )
