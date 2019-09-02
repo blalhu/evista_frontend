@@ -1,6 +1,4 @@
 <p>Products</p>
-<button (click)="productService.updateProducts()">refresh</button>
-
 <ul>
   <li *ngFor="let product of productService.getProducts()">
     <span>{{product.name}}</span>
