@@ -1,9 +1,10 @@
 import {Injectable, OnInit} from '@angular/core';
 import {CartItem} from './cart/cartItem';
 import {Product} from './products/product';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {ProductService} from './product.service';
 import {HttpClient} from '@angular/common/http';
+import {catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -118,11 +119,23 @@ export class CartService {
   }
 
   public saveCart() {
+    if (this.items.length < 1) {
+      alert('Your cart is empty!');
+      return;
+    }
     this.http.post(
       'http://127.0.0.1:16480/api/orders/',
-      this.toJsonString()
-    ).subscribe(
-      res => {
+      this.toJsonString(),
+      {observe: 'response'}
+    )
+      .pipe(
+        catchError(this.handleHttpError())
+      )
+      .subscribe(
+        (res) => {
+          if (res == null) {
+            return;
+          }
         for (let i in this.items) {
           let boughtItem = this.items[i];
           let product = this.productService.getProductById( boughtItem.product.id );
@@ -132,6 +145,14 @@ export class CartService {
         this.itemsSubject.next(this.items);
       }
     );
+  }
+
+  private handleHttpError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      alert('There was an error while we want to record your order!');
+      console.error(error);
+      return of(result as T);
+    };
   }
 
 }
