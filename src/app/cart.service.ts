@@ -29,6 +29,10 @@ export class CartService {
   }
 
   public addItem( product: Product ) {
+    if ( product.availableAmount < 1 ) {
+      alert('No more products left!');
+      return;
+    }
     if ( this.itemAlreadyAdded( product ) ) {
       this.increaseItemAmount( product );
       this.itemsSubject.next(this.items); //TODO: find an AOP way!
@@ -42,15 +46,26 @@ export class CartService {
   }
   public increaseItemAmount( product: Product ) {
     let item = this.findItem(product);
+    if ( item.requiredAmount + 1 > product.availableAmount ) {
+      alert('No more products left!');
+      return;
+    }
     item.requiredAmount++;
     this.itemsSubject.next(this.items); //TODO: find an AOP way!
   }
   public decreaseItemAmount( product: Product ) {
     let item = this.findItem(product);
+    if (item.requiredAmount - 1 < 1) {
+      this.removeItem( product );
+      return;
+    }
     item.requiredAmount--;
     this.itemsSubject.next(this.items); //TODO: find an AOP way!
   }
   public removeItem( product: Product ) {
+    if (!confirm('Are you sure you want to remove this item?')) {
+      return;
+    }
     let item = this.findItem(product);
     if ( item === null ) {
       throw new Error('Cannot find the item to delete!');
