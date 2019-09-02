@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {Product} from './products/product';
 import {HttpClient} from '@angular/common/http';
-import {Subject} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -30,17 +31,36 @@ export class ProductService {
     this.http.get(
       'http://127.0.0.1:16480/api/products/',
       {observe: 'response'}
-    ).subscribe(
-      res => {
-        this.responseToProducts(res.body);
-        this.productUpdateObserver.next(this.products);
+    )
+      .pipe(
+        catchError(this.handleHttpError())
+      )
+      .subscribe(
+      (res) => {
+        try {
+          this.responseToProducts(res.body);
+          this.productUpdateObserver.next(this.products);
+        } catch (e) {
+          console.error(e);
+          alert('There was an error while trying to access your data!');
+        }
       }
     );
   }
   public responseToProducts( responseObject ) {
     this.products = [];
+    if ( !responseObject.hasOwnProperty('products') ) {
+      throw new Error();
+    }
     for (let i in responseObject.products) {
       let product = responseObject.products[i];
+      if (
+        !product.hasOwnProperty('product-id')
+        || !product.hasOwnProperty('name')
+        || !product.hasOwnProperty('available-amount')
+      ) {
+        throw new Error();
+      }
       this.products.push({
         id:              product['product-id'],
         name:            product['name'],
@@ -56,5 +76,11 @@ export class ProductService {
       }
     }
     return null;
+  }
+  private handleHttpError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      return of(result as T);
+    };
   }
 }
