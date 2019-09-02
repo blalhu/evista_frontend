@@ -87,6 +87,9 @@ export class CartService {
 
   public loadFromLocalStorage() {
     let jsonObj = JSON.parse( localStorage.getItem('cart-content') );
+    if ( jsonObj === null ) {
+      return;
+    }
     for (let i in jsonObj.items) {
       let item = jsonObj.items[i];
       let product = this.productService.getProductById( item.id );
