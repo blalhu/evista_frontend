@@ -35,7 +35,6 @@ export class CartService {
     }
     if ( this.itemAlreadyAdded( product ) ) {
       this.increaseItemAmount( product );
-      this.itemsSubject.next(this.items); //TODO: find an AOP way!
       return;
     }
     let cartItem = new CartItem();
@@ -107,6 +106,7 @@ export class CartService {
     if ( jsonObj === null ) {
       return;
     }
+    this.items.splice(0, this.items.length);
     for (let i in jsonObj.items) {
       let item = jsonObj.items[i];
       let product = this.productService.getProductById( item.id );
@@ -118,13 +118,18 @@ export class CartService {
   }
 
   public saveCart() {
-    console.log(this.items);
     this.http.post(
       'http://127.0.0.1:16480/api/orders/',
       this.toJsonString()
     ).subscribe(
       res => {
-        console.log( 'orders saved' );
+        for (let i in this.items) {
+          let boughtItem = this.items[i];
+          let product = this.productService.getProductById( boughtItem.product.id );
+          product.availableAmount = product.availableAmount - boughtItem.requiredAmount;
+        }
+        this.items.splice(0, this.items.length);
+        this.itemsSubject.next(this.items);
       }
     );
   }
