@@ -1,10 +1,22 @@
-<a>Products</a>
-|
-<a>Cart</a>
+<mat-toolbar color="primary">
+  <span>Webshop</span>
 
-<div>
-  <app-products></app-products>
-  <app-cart></app-cart>
-</div>
+  <span class="example-fill-remaining-space"></span>
 
-<router-outlet></router-outlet>
+
+  <button mat-icon-button (click)="productService.updateProducts()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+
+  <button mat-icon-button (click)="drawer.toggle()">
+    <mat-icon>shopping_cart</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-drawer-container class="example-container" hasBackdrop="true">
+  <mat-drawer #drawer mode="over">
+    <app-cart></app-cart>
+  </mat-drawer>
+  <mat-drawer-content>
+    <app-products></app-products>
+  </mat-drawer-content>
+</mat-drawer-container>

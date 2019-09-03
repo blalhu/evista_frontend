@@ -1,13 +1,26 @@
-<p>Cart</p>
+<mat-list-item  *ngFor="let item of items">
+  <span>{{item.product.name}}</span>
 
-<ul>
-  <li *ngFor="let item of items">
-    <span>{{item.product.name}}</span>
-    <span>({{item.requiredAmount}})</span>
-    <button (click)="cartService.decreaseItemAmount(item.product)">-</button>
-    <button (click)="cartService.increaseItemAmount(item.product)">+</button>
-    <button (click)="cartService.removeItem(item.product)">X</button>
-  </li>
-</ul>
+  <span>({{item.requiredAmount}})</span>
 
-<button (click)="cartService.saveCart()">Save</button>
+  <span class="example-fill-remaining-space"></span>
+
+  <button mat-icon-button (click)="cartService.decreaseItemAmount(item.product)">
+    <mat-icon>remove</mat-icon>
+  </button>
+
+  <button mat-icon-button (click)="cartService.increaseItemAmount(item.product)">
+    <mat-icon>add</mat-icon>
+  </button>
+
+  <button mat-icon-button (click)="cartService.removeItem(item.product)">
+    <mat-icon>remove_shopping_cart</mat-icon>
+  </button>
+
+  <mat-divider></mat-divider>
+</mat-list-item>
+
+<button mat-raised-button color="primary" (click)="cartService.saveCart()">
+  <mat-icon>save</mat-icon>
+  <span>save</span>
+</button>

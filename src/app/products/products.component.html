@@ -1,9 +1,13 @@
-<p>Products</p>
-
-<button (click)="productService.updateProducts()">Refresh</button>
-<ul>
-  <li *ngFor="let product of productService.getProducts()">
+<mat-list>
+  <mat-list-item  *ngFor="let product of productService.getProducts()">
     <span>{{product.name}}</span>
-    <button (click)="cartService.addItem(product)">Add to cart</button>
-  </li>
-</ul>
+
+    <span class="example-fill-remaining-space"></span>
+
+    <button mat-icon-button (click)="cartService.addItem(product)">
+      <mat-icon>add_shopping_cart</mat-icon>
+    </button>
+
+    <mat-divider></mat-divider>
+  </mat-list-item>
+</mat-list>
