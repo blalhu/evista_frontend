@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CartComponent } from './cart/cart.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
+  MatBadgeModule,
   MatButtonModule,
   MatGridListModule,
   MatIconModule, MatListModule, MatSidenavModule,
@@ -34,6 +35,7 @@ import {MatCardModule} from '@angular/material/card';
     MatIconModule,
     MatSidenavModule,
     MatListModule,
+    MatBadgeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

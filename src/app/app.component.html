@@ -9,7 +9,12 @@
   </button>
 
   <button mat-icon-button (click)="drawer.toggle()">
-    <mat-icon>shopping_cart</mat-icon>
+    <mat-icon
+      matBadge="{{cartService.getitemsCount()}}"
+      matBadgePosition="above after"
+      matBadgeColor="accent"
+      [matBadgeHidden]="cartService.getitemsCount()===0"
+    >shopping_cart</mat-icon>
   </button>
 </mat-toolbar>
 <mat-drawer-container class="example-container" hasBackdrop="true">

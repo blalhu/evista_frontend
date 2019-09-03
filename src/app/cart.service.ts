@@ -12,6 +12,7 @@ import {catchError} from 'rxjs/operators';
 export class CartService {
   private items: Array<CartItem> = [];
   private itemsSubject = new BehaviorSubject<Array<CartItem>>(this.items);
+  private itemsCount: number = 0;
 
   private orderResourceUrl :string = 'http://127.0.0.1:16480/api/orders/';
 
@@ -23,6 +24,7 @@ export class CartService {
         this.loadFromLocalStorage();
         this.itemsSubject.subscribe(value => {
           localStorage.setItem('cart-content', this.toJsonString());
+          this.setItemsCount();
         });
       });
   }
@@ -160,6 +162,17 @@ export class CartService {
       console.error(error);
       return of(result as T);
     };
+  }
+
+  private setItemsCount() {
+    this.itemsCount = 0;
+    for (let i in this.items) {
+      this.itemsCount += this.items[i].requiredAmount;
+    }
+  }
+
+  public getitemsCount() {
+    return this.itemsCount;
   }
 
 }
