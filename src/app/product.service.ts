@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Product} from './products/product';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Observable, of, Subject} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
@@ -38,7 +38,7 @@ export class ProductService {
         catchError(this.handleHttpError())
       )
       .subscribe(
-      (res) => {
+      (res: HttpResponse<Object>) => {
         try {
           this.responseToProducts(res.body);
           this.productUpdateObserver.next(this.products);
